@@ -1,0 +1,17 @@
+.buildpath
+.settings/
+.project
+*.patch
+.idea/
+.git/
+runtime/
+vendor/
+public/
+.phpintel/
+.env
+.DS_Store
+.phpunit*
+*.cache
+.vscode/
+/phpstan.neon
+/phpunit.xml

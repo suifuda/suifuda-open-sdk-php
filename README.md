@@ -4,7 +4,7 @@
 
 ## 环境要求
 
-- PHP **7.2+**（兼容 PHP 7 / 8）
+- PHP >= **7.2+**
 - 扩展：`openssl`、`curl`、`json`、`gmp`（国密 SM2 需要）
 - Composer
 
@@ -16,22 +16,6 @@
 composer require suifuda/suifuda-open-sdk
 ```
 
-本地开发（path 仓库）：
-
-```json
-{
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../php-sdk"
-    }
-  ],
-  "require": {
-    "suifuda/open-sdk": "*"
-  }
-}
-```
-
 ### 2. 创建客户端
 
 ```php
@@ -40,7 +24,7 @@ use Suifuda\Sdk\Config\SignType;
 use Suifuda\Sdk\Config\SfdConfig;
 
 $sfdConfig = SfdConfig::builder()
-    ->useTestEnv()                          // 或 ->useProdEnv()
+    ->useProdEnv()                          // ->useTestEnv()测试环境 ->useProdEnv()生产环境
     ->appKey('YOUR_APP_KEY')
     ->privateKey('YOUR_PRIVATE_KEY')        // Base64，可不含 PEM 头尾
     ->signType(SignType::RSA())             // 或 SignType::SM() / 'SM'
@@ -55,10 +39,12 @@ $client = SfdClient::create($sfdConfig);
 ### 3. 发起业务请求
 
 ```php
-$httpResponse = $client->execute('/open/trade/v1/pay/barcode', array(
-    'orderNo' => '20260917001',
-    'authCode' => '134567890123456789',
-));
+
+$params = array(
+    'merchantOrgCode' => '100001568',
+    'orderTradeNo' => 'P2026091821008565894443704327',
+);
+$httpResponse = $client->execute('/open/trade/v1/pay/query', $params);
 
 echo $httpResponse->getStatusCode();
 echo $httpResponse->getBody();
